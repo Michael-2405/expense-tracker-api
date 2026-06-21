@@ -1,7 +1,7 @@
 package com.michaelespinosa.expensetracker.auth.application.usecase;
 
 import com.michaelespinosa.expensetracker.auth.application.command.RegisterUserCommand;
-import com.michaelespinosa.expensetracker.auth.application.result.AuthResult;
+import com.michaelespinosa.expensetracker.auth.application.result.RegisterUserResult;
 import com.michaelespinosa.expensetracker.auth.domain.exception.UserAlreadyExistsException;
 import com.michaelespinosa.expensetracker.auth.domain.model.User;
 import com.michaelespinosa.expensetracker.auth.domain.repository.UserRepository;
@@ -23,27 +23,22 @@ public class RegisterUser {
     }
 
     @Transactional
-    public AuthResult execute(RegisterUserCommand command) {
-        // 1. Email
+    public RegisterUserResult execute(RegisterUserCommand command) {
         Email email = Email.of(command.email());
 
-        // existe
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(email.toString());
         }
 
-        // password
         Password password = Password.of(command.password());
 
         String hashedPassword = passwordHasher.hash(password.value());
 
-        // registro
         User user = User.register(command.firstName(), command.lastName(), email, hashedPassword);
 
-        // repository
         userRepository.save(user);
 
-        return new AuthResult(
+        return new RegisterUserResult(
                 user.id(),
                 user.firstName(),
                 user.lastName(),

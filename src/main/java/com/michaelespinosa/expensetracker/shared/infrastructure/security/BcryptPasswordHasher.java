@@ -2,7 +2,9 @@ package com.michaelespinosa.expensetracker.shared.infrastructure.security;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.michaelespinosa.expensetracker.shared.domain.security.PasswordHasher;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class BcryptPasswordHasher implements PasswordHasher {
     @Override
     public String hash(String plainPassword) {
