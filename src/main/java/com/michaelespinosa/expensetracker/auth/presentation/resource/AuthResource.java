@@ -1,9 +1,14 @@
 package com.michaelespinosa.expensetracker.auth.presentation.resource;
 
+import com.michaelespinosa.expensetracker.auth.application.command.LoginUserCommand;
 import com.michaelespinosa.expensetracker.auth.application.command.RegisterUserCommand;
+import com.michaelespinosa.expensetracker.auth.application.result.LoginUserResult;
 import com.michaelespinosa.expensetracker.auth.application.result.RegisterUserResult;
+import com.michaelespinosa.expensetracker.auth.application.usecase.LoginUser;
 import com.michaelespinosa.expensetracker.auth.application.usecase.RegisterUser;
+import com.michaelespinosa.expensetracker.auth.presentation.request.LoginUserRequest;
 import com.michaelespinosa.expensetracker.auth.presentation.request.RegisterUserRequest;
+import com.michaelespinosa.expensetracker.auth.presentation.response.LoginUserResponse;
 import com.michaelespinosa.expensetracker.auth.presentation.response.RegisterUserResponse;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -18,6 +23,7 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
+
     @Inject
     RegisterUser registerUser;
 
@@ -28,5 +34,17 @@ public class AuthResource {
         RegisterUserResult result = registerUser.execute(command);
         RegisterUserResponse response = new RegisterUserResponse(result.id(), result.firstName(), result.lastName(), result.email(), result.createdAt(), "User registered successfully");
         return Response.status(Response.Status.CREATED).entity(response).build();
+    }
+
+    @Inject
+    LoginUser loginUser;
+
+    @POST
+    @Path("/login")
+    public Response login(@Valid LoginUserRequest request) {
+        LoginUserCommand command = new LoginUserCommand(request.email(), request.password());
+        LoginUserResult result = loginUser.execute(command);
+        LoginUserResponse response = new LoginUserResponse(result.token(), result.expiresAt());
+        return Response.status(Response.Status.OK).entity(response).build();
     }
 }

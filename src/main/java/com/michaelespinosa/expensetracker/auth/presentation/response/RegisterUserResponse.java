@@ -10,5 +10,4 @@ public record RegisterUserResponse(
         String email,
         Instant createdAt,
         String message
-) {
-}
+) {}
