@@ -1,8 +1,9 @@
 package com.michaelespinosa.expensetracker.auth.application.command;
 
-public record RegisterUserCommand(
-        String firstName,
-        String lastName,
+import com.michaelespinosa.expensetracker.auth.domain.valueobject.Email;
+
+public record LoginUserCommand (
         String email,
         String password
-) {}
+) {
+}

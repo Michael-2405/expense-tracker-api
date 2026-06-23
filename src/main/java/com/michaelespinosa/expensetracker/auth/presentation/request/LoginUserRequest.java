@@ -5,15 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-public record RegisterUserRequest (
-        @NotBlank
-        @Schema(examples = "Michael")
-        String firstName,
-
-        @NotBlank
-        @Schema(examples = "Espinosa")
-        String lastName,
-
+public record LoginUserRequest (
         @NotBlank
         @Email
         @Schema(examples = "michael@example.com")
