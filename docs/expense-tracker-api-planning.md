@@ -8,6 +8,10 @@
 - Un usuario puede eliminar su cuenta con confirmación de email + contraseña
 - Al eliminar la cuenta, todos sus gastos se eliminan en cascada (hard delete)
 - Las cuentas se eliminan con soft delete (`deletedAt`)
+- Access token JWT con duración de 24 horas
+- Sin refresh tokens en esta versión (mejora futura documentada)
+- Revocación: el cliente descarta el token al cerrar sesión;
+  el token sigue válido hasta expiración natural
 
 ### Category
 - Las categorías son globales, administradas por el sistema
