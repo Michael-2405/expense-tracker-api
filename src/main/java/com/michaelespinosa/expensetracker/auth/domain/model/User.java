@@ -40,7 +40,7 @@ public class User {
 
     public void delete() {
         if (isDeleted()) {
-            throw new UserAlreadyDeletedException("User is already deleted");
+            throw new UserAlreadyDeletedException();
         }
         this.deletedAt = Instant.now();
         this.updatedAt = Instant.now();
