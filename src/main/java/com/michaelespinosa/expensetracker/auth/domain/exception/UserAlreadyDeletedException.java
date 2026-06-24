@@ -4,7 +4,7 @@ import com.michaelespinosa.expensetracker.shared.domain.exception.ConflictExcept
 
 public class UserAlreadyDeletedException extends ConflictException{
 
-    public UserAlreadyDeletedException(String message) {
-        super(message);
+    public UserAlreadyDeletedException() {
+        super("User account has already been deleted.");
     }
 }
