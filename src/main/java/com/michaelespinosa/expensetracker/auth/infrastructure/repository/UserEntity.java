@@ -36,9 +36,7 @@ public class UserEntity extends PanacheEntityBase {
     @Column(name = "deleted_at")
     public Instant deletedAt;
 
-    protected UserEntity() {
-
-    }
+    protected UserEntity() {}
 
     public UserEntity(UUID id, String firstName, String lastName, String email,
                       String passwordHash, Instant createdAt, Instant updatedAt, Instant deletedAt) {

@@ -1,0 +1,22 @@
+package com.michaelespinosa.expensetracker.shared.presentation.exception;
+
+import com.michaelespinosa.expensetracker.shared.domain.exception.NotFoundException;
+import com.michaelespinosa.expensetracker.shared.presentation.response.ErrorResponse;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+
+@Provider
+public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
+
+    @Override
+    public Response toResponse(NotFoundException exception) {
+        ErrorResponse error = new ErrorResponse(
+                "Not Found Error",
+                404,
+                exception.getMessage()
+        );
+
+        return  Response.status(404).entity(error).build();
+    }
+}

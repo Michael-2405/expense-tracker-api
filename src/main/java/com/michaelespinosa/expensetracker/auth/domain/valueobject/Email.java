@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 import com.michaelespinosa.expensetracker.auth.domain.exception.InvalidEmailException;
 
 public final class Email {
-    private static  final Pattern EMAIL_PATTERN =
+
+    private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
     private final String value;
