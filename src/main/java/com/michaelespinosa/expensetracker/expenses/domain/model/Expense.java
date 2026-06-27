@@ -1,6 +1,7 @@
 package com.michaelespinosa.expensetracker.expenses.domain.model;
 
 import com.michaelespinosa.expensetracker.expenses.domain.exception.ExpenseNotEditableException;
+import com.michaelespinosa.expensetracker.expenses.domain.exception.InvalidExpenseDateException;
 import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Money;
 
 import java.time.Duration;
@@ -31,7 +32,15 @@ public class Expense {
         this.updatedAt = updatedAt;
     }
 
+    private static void validateExpenseDate(LocalDate expenseDate) {
+        if (expenseDate.isAfter(LocalDate.now())) {
+            throw new InvalidExpenseDateException();
+        }
+    }
+
     public static Expense create(String title, Money cost, LocalDate expenseDate, UUID userId, UUID categoryId) {
+        validateExpenseDate(expenseDate);
+
         Instant now = Instant.now();
         return new Expense(UUID.randomUUID(), title, cost, expenseDate, userId, categoryId, now, now);
     }
@@ -49,6 +58,8 @@ public class Expense {
         if(!isEditable()) {
             throw  new ExpenseNotEditableException();
         }
+
+        validateExpenseDate(expenseDate);
 
         this.title = title;
         this.cost = cost;
