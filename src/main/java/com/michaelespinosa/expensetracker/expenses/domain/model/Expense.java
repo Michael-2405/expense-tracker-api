@@ -67,7 +67,7 @@ public class Expense {
         this.categoryId = categoryId;
         this.updatedAt = Instant.now();
     }
-
+    
     public UUID id() { return id; }
     public String title() { return title; }
     public Money cost() { return cost; }
