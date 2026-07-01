@@ -15,5 +15,4 @@ public record DeleteAccountRequest(
         @Size(min = 8, max = 72)
         @Schema(examples = "SecurePass123!")
         String password
-) {
-}
+) {}

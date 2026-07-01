@@ -1,11 +1,12 @@
 package com.michaelespinosa.expensetracker.shared.presentation.exception;
 
 import com.michaelespinosa.expensetracker.shared.domain.exception.BadRequestException;
-import com.michaelespinosa.expensetracker.shared.domain.exception.ConflictException;
 import com.michaelespinosa.expensetracker.shared.presentation.response.ErrorResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
 
+@Provider
 public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestException> {
 
     @Override
@@ -16,6 +17,6 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
                 exception.getMessage()
         );
 
-        return Response.status(409).entity(error).build();
+        return Response.status(400).entity(error).build();
     }
 }

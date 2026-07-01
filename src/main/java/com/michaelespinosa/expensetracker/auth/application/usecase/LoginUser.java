@@ -11,8 +11,6 @@ import com.michaelespinosa.expensetracker.shared.domain.security.PasswordHasher;
 import com.michaelespinosa.expensetracker.shared.domain.security.TokenGenerator;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 
 @ApplicationScoped
