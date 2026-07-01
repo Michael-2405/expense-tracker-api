@@ -1,29 +1,19 @@
 package com.michaelespinosa.expensetracker.expenses.presentation.resource;
 
-import com.aayushatharva.brotli4j.common.annotations.Local;
-import com.michaelespinosa.expensetracker.expenses.application.command.CreateExpenseCommand;
-import com.michaelespinosa.expensetracker.expenses.application.command.EditExpenseCommand;
-import com.michaelespinosa.expensetracker.expenses.application.command.GetExpenseDetailCommand;
-import com.michaelespinosa.expensetracker.expenses.application.command.ListExpensesCommand;
-import com.michaelespinosa.expensetracker.expenses.application.result.CreateExpenseResult;
-import com.michaelespinosa.expensetracker.expenses.application.result.EditExpenseResult;
-import com.michaelespinosa.expensetracker.expenses.application.result.GetExpenseDetailResult;
-import com.michaelespinosa.expensetracker.expenses.application.result.ListExpensesResult;
-import com.michaelespinosa.expensetracker.expenses.application.usecase.CreateExpense;
-import com.michaelespinosa.expensetracker.expenses.application.usecase.EditExpense;
-import com.michaelespinosa.expensetracker.expenses.application.usecase.GetExpenseDetail;
-import com.michaelespinosa.expensetracker.expenses.application.usecase.ListExpenses;
+import com.michaelespinosa.expensetracker.expenses.application.command.*;
+import com.michaelespinosa.expensetracker.expenses.application.result.*;
+import com.michaelespinosa.expensetracker.expenses.application.usecase.*;
 import com.michaelespinosa.expensetracker.expenses.domain.filter.Period;
 import com.michaelespinosa.expensetracker.expenses.presentation.request.CreateExpenseRequest;
 import com.michaelespinosa.expensetracker.expenses.presentation.request.EditExpenseRequest;
-import com.michaelespinosa.expensetracker.expenses.presentation.response.CreateExpenseResponse;
-import com.michaelespinosa.expensetracker.expenses.presentation.response.EditExpenseResponse;
-import com.michaelespinosa.expensetracker.expenses.presentation.response.GetExpenseDetailResponse;
-import com.michaelespinosa.expensetracker.expenses.presentation.response.ListExpensesResponse;
+import com.michaelespinosa.expensetracker.expenses.presentation.response.*;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -51,6 +41,9 @@ public class ExpenseResource {
 
     @Inject
     ListExpenses listExpenses;
+
+    @Inject
+    GetMonthlySummary getMonthlySummary;
 
     @POST
     @Authenticated
@@ -186,6 +179,40 @@ public class ExpenseResource {
                         expense.categoryId(),
                         expense.createdAt(),
                         expense.updatedAt()
+                ))
+                .toList();
+
+        return Response
+                .status(Response.Status.OK)
+                .entity(response)
+                .build();
+    }
+
+    @GET
+    @Authenticated
+    @Path("/summary")
+    public Response getMonthlySummary(
+            @QueryParam("year") @NotNull Integer year,
+            @QueryParam("month") @NotNull @Min(1) @Max(12) Integer month
+    ) {
+        UUID userId = UUID.fromString(
+                securityIdentity.getPrincipal().getName()
+        );
+
+        GetMonthlySummaryCommand command = new GetMonthlySummaryCommand(
+                userId,
+                year,
+                month
+        );
+
+        List<GetMonthlySummaryResult> result = getMonthlySummary.execute(command);
+
+        List<GetMonthlySummaryResponse> response = result.stream()
+                .map(summary -> new GetMonthlySummaryResponse(
+                        summary.categoryId(),
+                        summary.categoryName(),
+                        summary.currency(),
+                        summary.totalAmount()
                 ))
                 .toList();
 

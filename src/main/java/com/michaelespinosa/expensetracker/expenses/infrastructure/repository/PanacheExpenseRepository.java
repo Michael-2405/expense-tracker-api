@@ -4,7 +4,6 @@ import com.michaelespinosa.expensetracker.expenses.domain.filter.ExpenseFilter;
 import com.michaelespinosa.expensetracker.expenses.domain.model.Expense;
 import com.michaelespinosa.expensetracker.expenses.domain.projection.ExpenseSummaryEntry;
 import com.michaelespinosa.expensetracker.expenses.domain.repository.ExpenseRepository;
-import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Currency;
 import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Money;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -99,7 +98,7 @@ public class PanacheExpenseRepository implements ExpenseRepository {
                 expense.id(),
                 expense.title(),
                 expense.cost().amount(),
-                expense.cost().currency().name(),
+                expense.cost().currency(),
                 expense.expenseDate(),
                 expense.userId(),
                 expense.categoryId(),
@@ -112,7 +111,7 @@ public class PanacheExpenseRepository implements ExpenseRepository {
         return Expense.reconstitute(
                 entity.id,
                 entity.title,
-                Money.of(entity.cost, Currency.valueOf(entity.currency)),
+                Money.of(entity.cost, entity.currency),
                 entity.expenseDate,
                 entity.userId,
                 entity.categoryId,

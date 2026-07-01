@@ -1,9 +1,12 @@
 package com.michaelespinosa.expensetracker.expenses.infrastructure.repository;
 
+import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Currency;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
@@ -24,8 +27,9 @@ public class ExpenseEntity extends PanacheEntityBase {
     @Column(name = "cost", nullable = false)
     public BigDecimal cost;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false, length = 3)
-    public String currency;
+    public Currency currency;
 
     @Column(name = "expense_date", nullable = false)
     public LocalDate expenseDate;
@@ -44,7 +48,7 @@ public class ExpenseEntity extends PanacheEntityBase {
 
     protected ExpenseEntity() {}
 
-    public ExpenseEntity(UUID id, String title, BigDecimal cost, String currency, LocalDate expenseDate,
+    public ExpenseEntity(UUID id, String title, BigDecimal cost, Currency currency, LocalDate expenseDate,
                          UUID userId, UUID categoryId, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.title = title;
