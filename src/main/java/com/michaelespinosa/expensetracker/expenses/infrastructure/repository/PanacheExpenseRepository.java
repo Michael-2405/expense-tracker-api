@@ -6,6 +6,7 @@ import com.michaelespinosa.expensetracker.expenses.domain.projection.ExpenseSumm
 import com.michaelespinosa.expensetracker.expenses.domain.repository.ExpenseRepository;
 import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Currency;
 import com.michaelespinosa.expensetracker.expenses.domain.valueobject.Money;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
@@ -47,17 +48,18 @@ public class PanacheExpenseRepository implements ExpenseRepository {
         }
 
         if (filter.startDate() != null) {
-            query.append(" and createdAt >= ?").append(params.size() + 1);
+            query.append(" and expenseDate >= ?").append(params.size() + 1);
             params.add(filter.startDate());
         }
 
         if (filter.endDate() != null) {
-            query.append(" and createdAt <= ?").append(params.size() + 1);
+            query.append(" and expenseDate <= ?").append(params.size() + 1);
             params.add(filter.endDate());
         }
 
         List<ExpenseEntity> entities = ExpenseEntity.find(
                 query.toString(),
+                Sort.descending("expenseDate"),
                 params.toArray()
         ).list();
 
